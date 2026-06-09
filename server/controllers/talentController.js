@@ -60,7 +60,25 @@ exports.createTalent = async (req, res) => {
     if (!agency) return res.status(404).json({ success: false, message: 'Agency profile not found' });
     if (!agency.isApproved) return res.status(403).json({ success: false, message: 'Agency not yet approved by admin' });
 
-    const talent = await TalentProfile.create({ ...req.body, agency: agency._id });
+    // If a file was uploaded, set its URL (served from /uploads/)
+    const photoUrl = req.file ? `/uploads/${req.file.filename}` : req.body.photo || '';
+
+    // Parse array fields sent as FormData (field[] format)
+    const skills        = [].concat(req.body['skills[]']        || req.body.skills        || []);
+    const contractTypes = [].concat(req.body['contractTypes[]'] || req.body.contractTypes || []);
+    const salaryRange   = {
+      min: Number(req.body['salaryRange[min]'] || 0),
+      max: Number(req.body['salaryRange[max]'] || 0),
+    };
+
+    const talent = await TalentProfile.create({
+      ...req.body,
+      photo: photoUrl,
+      skills,
+      contractTypes,
+      salaryRange,
+      agency: agency._id,
+    });
     res.status(201).json({ success: true, talent });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -77,7 +95,17 @@ exports.updateTalent = async (req, res) => {
     if (String(talent.agency) !== String(agency._id))
       return res.status(403).json({ success: false, message: 'Not your talent profile' });
 
-    const updated = await TalentProfile.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updateData = { ...req.body };
+    if (req.file) updateData.photo = `/uploads/${req.file.filename}`;
+    if (req.body['skills[]'])        updateData.skills        = [].concat(req.body['skills[]']);
+    if (req.body['contractTypes[]']) updateData.contractTypes = [].concat(req.body['contractTypes[]']);
+    if (req.body['salaryRange[min]'] !== undefined) {
+      updateData.salaryRange = {
+        min: Number(req.body['salaryRange[min]']),
+        max: Number(req.body['salaryRange[max]'] || 0),
+      };
+    }
+    const updated = await TalentProfile.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.json({ success: true, talent: updated });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

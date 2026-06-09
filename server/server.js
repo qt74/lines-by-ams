@@ -4,6 +4,7 @@ const cors       = require('cors');
 const helmet     = require('helmet');
 const morgan     = require('morgan');
 const rateLimit  = require('express-rate-limit');
+const path       = require('path');
 const connectDB  = require('./config/db');
 
 // Connect to MongoDB
@@ -12,7 +13,7 @@ connectDB();
 const app = express();
 
 // ─── Security ────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -22,8 +23,19 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // ─── CORS ─────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'https://illustrious-crepe-d5f9e3.netlify.app'],
+  origin: (origin, cb) => {
+    // Allow requests with no origin (Postman, server-to-server)
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    cb(new Error(`CORS blocked: ${origin}`));
+  },
   credentials: true,
 }));
 
@@ -33,6 +45,9 @@ app.use('/api/employment/webhook', express.raw({ type: 'application/json' }));
 // ─── Body parsing ─────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ─── Static uploads ───────────────────────────────────────
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ─── Logger (dev only) ────────────────────────────────────
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));

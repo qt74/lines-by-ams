@@ -1,7 +1,13 @@
 const Employment    = require('../models/Employment');
 const TalentProfile = require('../models/TalentProfile');
 const Agency        = require('../models/Agency');
-const stripe        = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+// Stripe — only initialised when a real key is present
+const getStripe = () => {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key || key === 'sk_test_placeholder') return null;
+  return require('stripe')(key);
+};
 
 const AGENCY_ADVANCE = [
   'Interview Scheduled',
@@ -161,6 +167,14 @@ exports.confirmDownPayment = async (req, res) => {
 // @route POST /api/employment/:id/payment
 exports.createPaymentIntent = async (req, res) => {
   try {
+    const stripe = getStripe();
+    if (!stripe) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payment not configured yet. Add STRIPE_SECRET_KEY to .env to enable payments.',
+      });
+    }
+
     const employment = await Employment.findById(req.params.id);
     if (!employment) return res.status(404).json({ success: false, message: 'Employment not found' });
     if (String(employment.customer) !== String(req.user._id))
@@ -171,7 +185,7 @@ exports.createPaymentIntent = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Agreed salary not set yet' });
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount:   employment.agreedSalary * 100,   // Stripe uses smallest currency unit (halalas)
+      amount:   employment.agreedSalary * 100,
       currency: 'qar',
       metadata: { employmentId: String(employment._id) },
     });
@@ -188,6 +202,9 @@ exports.createPaymentIntent = async (req, res) => {
 // @desc  Stripe webhook — marks full payment received
 // @route POST /api/employment/webhook
 exports.stripeWebhook = async (req, res) => {
+  const stripe = getStripe();
+  if (!stripe) return res.json({ received: false, reason: 'Stripe not configured' });
+
   const sig = req.headers['stripe-signature'];
   let event;
   try {
