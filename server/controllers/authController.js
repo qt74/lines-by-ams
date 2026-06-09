@@ -1,0 +1,109 @@
+const User          = require('../models/User');
+const Agency        = require('../models/Agency');
+const generateToken = require('../utils/generateToken');
+
+// @desc  Register user (customer or agency)
+// @route POST /api/auth/register
+exports.register = async (req, res) => {
+  try {
+    const { name, email, password, role, phone, location, agencyName, description } = req.body;
+
+    const exists = await User.findOne({ email });
+    if (exists) return res.status(400).json({ success: false, message: 'Email already registered' });
+
+    // Only allow customer or agency roles on self-registration
+    const allowedRoles = ['customer', 'agency'];
+    if (!allowedRoles.includes(role)) {
+      return res.status(400).json({ success: false, message: 'Invalid role' });
+    }
+
+    const user = await User.create({ name, email, password, role, phone, location });
+
+    // If registering as agency, create agency profile
+    if (role === 'agency') {
+      if (!agencyName) return res.status(400).json({ success: false, message: 'Agency name required' });
+      await Agency.create({ user: user._id, agencyName, description: description || '' });
+    }
+
+    const token = generateToken(user._id);
+    res.status(201).json({
+      success: true,
+      token,
+      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// @desc  Login
+// @route POST /api/auth/login
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(400).json({ success: false, message: 'Email and password required' });
+
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+
+    const match = await user.matchPassword(password);
+    if (!match) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+
+    if (!user.isActive) return res.status(403).json({ success: false, message: 'Account suspended' });
+
+    const token = generateToken(user._id);
+
+    // Attach agency profile if applicable
+    let agencyProfile = null;
+    if (user.role === 'agency') {
+      agencyProfile = await Agency.findOne({ user: user._id });
+    }
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        _id:     user._id,
+        name:    user.name,
+        email:   user.email,
+        role:    user.role,
+        avatar:  user.avatar,
+        agency:  agencyProfile,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// @desc  Get current user
+// @route GET /api/auth/me
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    let agencyProfile = null;
+    if (user.role === 'agency') {
+      agencyProfile = await Agency.findOne({ user: user._id });
+    }
+    res.json({ success: true, user: { ...user.toObject(), agency: agencyProfile } });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// @desc  Update profile
+// @route PUT /api/auth/me
+exports.updateMe = async (req, res) => {
+  try {
+    const { name, phone, location, lang } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, phone, location, lang },
+      { new: true, runValidators: true }
+    );
+    res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
