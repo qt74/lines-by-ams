@@ -55,6 +55,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 // ─── Routes ───────────────────────────────────────────────
 app.use('/api/auth',       require('./routes/auth'));
 app.use('/api/talent',     require('./routes/talent'));
+app.use('/api/agencies',   require('./routes/agencies'));
 app.use('/api/employment', require('./routes/employment'));
 app.use('/api/messages',   require('./routes/messages'));
 app.use('/api/admin',      require('./routes/admin'));

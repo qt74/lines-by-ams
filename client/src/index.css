@@ -373,6 +373,81 @@ textarea { resize: vertical; }
 .loading-screen { display: flex; align-items: center; justify-content: center; min-height: 40vh; color: var(--gray-500); font-size: .9rem; }
 .empty-text { color: var(--gray-400); font-size: .9rem; }
 
+/* ─── PREMIUM TALENT CARD ────────────────────────────── */
+.talent-card--premium { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.talent-card--premium:hover { box-shadow: 0 0 0 1px var(--gold), var(--shadow-lg); }
+.talent-card__premium-badge {
+  position: absolute; bottom: .75rem; left: .75rem;
+  font-size: .7rem; font-weight: 600; letter-spacing: .06em;
+  padding: .25rem .65rem; border-radius: 99px;
+  background: var(--gold); color: var(--white);
+  text-transform: uppercase;
+}
+.talent-card__exp { font-size: .78rem; color: var(--gray-500); margin-bottom: .4rem; }
+.premium-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--gold);
+  margin-left: .35rem; vertical-align: middle;
+}
+
+/* ─── FILTER COUNT BADGE ─────────────────────────────── */
+.filter-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--black); color: var(--white);
+  font-size: .68rem; font-weight: 600; margin-left: .4rem;
+}
+
+/* ─── NAVBAR PROFILE LINK ────────────────────────────── */
+.navbar__profile-link { display: flex; align-items: center; gap: .45rem; }
+.navbar__avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--black); color: var(--white);
+  font-size: .75rem; font-weight: 600; flex-shrink: 0;
+}
+
+/* ─── BADGE EXTRAS ───────────────────────────────────── */
+.badge--blue { background: #dbeafe; color: #1d4ed8; }
+.badge--gold { background: #fef3c7; color: #92400e; }
+
+/* ─── PROFILE PAGE ───────────────────────────────────── */
+.profile-page { padding: 3rem 0 5rem; }
+.container--narrow { max-width: 760px; }
+.profile-card {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg); padding: 2.5rem;
+}
+.profile-card__header {
+  display: flex; align-items: center; gap: 1.5rem;
+  padding-bottom: 2rem; margin-bottom: 2rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+.profile-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--black); color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 2rem; font-weight: 300;
+  flex-shrink: 0;
+}
+.profile-card__name  { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; margin-bottom: .2rem; }
+.profile-card__email { font-size: .88rem; color: var(--gray-500); margin-bottom: .5rem; }
+
+.profile-form h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: .04em; }
+.profile-form h3 { font-size: .9rem; font-weight: 600; margin-bottom: 1rem; color: var(--gray-600); }
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: .4rem; color: var(--gray-600); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* Agency logo upload */
+.agency-logo-wrap { position: relative; flex-shrink: 0; }
+.agency-logo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gray-200); }
+.logo-upload-label {
+  display: block; font-size: .7rem; text-align: center; margin-top: .4rem;
+  color: var(--gray-500); cursor: pointer; text-decoration: underline;
+}
+.logo-upload-label:hover { color: var(--black); }
+
 /* ─── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 900px) {
   .browse-page__layout    { grid-template-columns: 1fr; }

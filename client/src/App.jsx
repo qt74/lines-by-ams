@@ -19,10 +19,12 @@ import AgencyDashboard    from './pages/agency/AgencyDashboard';
 import TalentForm         from './pages/agency/TalentForm';
 
 // Lazily loaded
-const TalentDetail     = lazy(() => import('./pages/public/TalentDetail'));
-const EmploymentDetail = lazy(() => import('./pages/customer/EmploymentDetail'));
-const AgencyEmployment = lazy(() => import('./pages/agency/AgencyEmployment'));
-const AdminDashboard   = lazy(() => import('./pages/admin/AdminDashboard'));
+const TalentDetail      = lazy(() => import('./pages/public/TalentDetail'));
+const EmploymentDetail  = lazy(() => import('./pages/customer/EmploymentDetail'));
+const CustomerProfile   = lazy(() => import('./pages/customer/CustomerProfile'));
+const AgencyEmployment  = lazy(() => import('./pages/agency/AgencyEmployment'));
+const AgencyProfile     = lazy(() => import('./pages/agency/AgencyProfile'));
+const AdminDashboard    = lazy(() => import('./pages/admin/AdminDashboard'));
 
 function Layout({ children }) {
   return (
@@ -62,6 +64,11 @@ export default function App() {
               <Layout><EmploymentDetail /></Layout>
             </ProtectedRoute>
           } />
+          <Route path="/profile" element={
+            <ProtectedRoute roles={['customer']}>
+              <Layout><CustomerProfile /></Layout>
+            </ProtectedRoute>
+          } />
 
           {/* AGENCY */}
           <Route path="/agency/dashboard" element={
@@ -82,6 +89,11 @@ export default function App() {
           <Route path="/agency/employment/:id" element={
             <ProtectedRoute roles={['agency']}>
               <Layout><AgencyEmployment /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/agency/profile" element={
+            <ProtectedRoute roles={['agency']}>
+              <Layout><AgencyProfile /></Layout>
             </ProtectedRoute>
           } />
 

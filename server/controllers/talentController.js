@@ -5,20 +5,27 @@ const Agency        = require('../models/Agency');
 // @route GET /api/talent
 exports.getAllTalent = async (req, res) => {
   try {
-    const { skill, contract, location, minSalary, maxSalary, availability, search, page = 1, limit = 12 } = req.query;
+    const {
+      skill, contract, location, minSalary, maxSalary,
+      availability, search, agencyId, minExp, maxExp,
+      page = 1, limit = 12,
+    } = req.query;
 
     const query = { isActive: true };
 
-    if (skill)         query.skills        = skill;
-    if (contract)      query.contractTypes = contract;
-    if (location)      query.location      = { $regex: location, $options: 'i' };
-    if (availability)  query.availability  = availability;
-    if (minSalary)     query['salaryRange.min'] = { $gte: Number(minSalary) };
-    if (maxSalary)     query['salaryRange.max'] = { $lte: Number(maxSalary) };
-    if (search)        query.$or = [
-      { name:  { $regex: search, $options: 'i' } },
-      { nameAr:{ $regex: search, $options: 'i' } },
-      { bio:   { $regex: search, $options: 'i' } },
+    if (skill)        query.skills        = skill;
+    if (contract)     query.contractTypes = contract;
+    if (location)     query.location      = { $regex: location, $options: 'i' };
+    if (availability) query.availability  = availability;
+    if (agencyId)     query.agency        = agencyId;
+    if (minSalary)    query['salaryRange.min'] = { $gte: Number(minSalary) };
+    if (maxSalary)    query['salaryRange.max'] = { $lte: Number(maxSalary) };
+    if (minExp)       query.experience    = { ...(query.experience || {}), $gte: Number(minExp) };
+    if (maxExp)       query.experience    = { ...(query.experience || {}), $lte: Number(maxExp) };
+    if (search)       query.$or = [
+      { name:   { $regex: search, $options: 'i' } },
+      { nameAr: { $regex: search, $options: 'i' } },
+      { bio:    { $regex: search, $options: 'i' } },
     ];
 
     const total  = await TalentProfile.countDocuments(query);

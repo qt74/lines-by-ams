@@ -9,6 +9,7 @@
     "login": "Sign In",
     "register": "Get Started",
     "dashboard": "Dashboard",
+    "profile": "My Profile",
     "logout": "Sign Out"
   },
   "auth": {

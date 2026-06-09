@@ -44,8 +44,10 @@ function AdminOverview() {
       <div className="stats-grid">
         <div className="stat-card"><div className="stat-card__value">{stats.totalUsers}</div><div className="stat-card__label">Total Users</div></div>
         <div className="stat-card"><div className="stat-card__value">{stats.totalAgencies}</div><div className="stat-card__label">Approved Agencies</div></div>
+        <div className="stat-card"><div className="stat-card__value">{stats.totalEmployments}</div><div className="stat-card__label">Total Hirings</div></div>
         <div className="stat-card"><div className="stat-card__value">{stats.completedEmployments}</div><div className="stat-card__label">Completed Hirings</div></div>
-        <div className="stat-card"><div className="stat-card__value">{stats.totalRevenue?.toLocaleString()} QAR</div><div className="stat-card__label">Platform Revenue (10%)</div></div>
+        <div className="stat-card"><div className="stat-card__value">{(stats.totalVolume ?? 0).toLocaleString()} QAR</div><div className="stat-card__label">Total Volume</div></div>
+        <div className="stat-card"><div className="stat-card__value">{(stats.totalRevenue ?? 0).toLocaleString()} QAR</div><div className="stat-card__label">Platform Revenue (10%)</div></div>
       </div>
     </div>
   );
