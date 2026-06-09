@@ -13,12 +13,11 @@ const UserSchema = new mongoose.Schema({
   lang:     { type: String, enum: ['en', 'ar'], default: 'en' },
 }, { timestamps: true });
 
-// Hash password before save
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+// Hash password before save (Mongoose 6+: async hooks — do NOT call next())
+UserSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // Compare password

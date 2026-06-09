@@ -20,16 +20,17 @@ exports.register = async (req, res) => {
     const user = await User.create({ name, email, password, role, phone, location });
 
     // If registering as agency, create agency profile
+    let agencyProfile = null;
     if (role === 'agency') {
       if (!agencyName) return res.status(400).json({ success: false, message: 'Agency name required' });
-      await Agency.create({ user: user._id, agencyName, description: description || '' });
+      agencyProfile = await Agency.create({ user: user._id, agencyName, description: description || '' });
     }
 
     const token = generateToken(user._id);
     res.status(201).json({
       success: true,
       token,
-      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
+      user: { _id: user._id, name: user.name, email: user.email, role: user.role, agency: agencyProfile },
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -87,6 +88,31 @@ exports.getMe = async (req, res) => {
       agencyProfile = await Agency.findOne({ user: user._id });
     }
     res.json({ success: true, user: { ...user.toObject(), agency: agencyProfile } });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// @desc  Dev-only: create first admin if none exists
+// @route POST /api/auth/init-admin
+exports.initAdmin = async (req, res) => {
+  if (process.env.NODE_ENV !== 'development') {
+    return res.status(403).json({ success: false, message: 'Only available in development' });
+  }
+  try {
+    const adminExists = await User.findOne({ role: 'admin' });
+    if (adminExists) {
+      return res.status(400).json({ success: false, message: 'Admin already exists. Use /login.' });
+    }
+    const { name = 'Super Admin', email = 'admin@fashionmission.qa', password = 'Admin@FM2024!' } = req.body;
+    const admin = await User.create({ name, email, password, role: 'admin' });
+    const token = generateToken(admin._id);
+    res.status(201).json({
+      success: true,
+      message: 'Admin created! Change the password immediately.',
+      token,
+      user: { _id: admin._id, name: admin.name, email: admin.email, role: admin.role },
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

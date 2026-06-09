@@ -46,13 +46,12 @@ const EmploymentSchema = new mongoose.Schema({
   notes: { type: String },
 }, { timestamps: true });
 
-// Auto-calculate fees when agreedSalary is set
-EmploymentSchema.pre('save', function (next) {
+// Auto-calculate fees when agreedSalary is set (sync hook — no next() needed)
+EmploymentSchema.pre('save', function () {
   if (this.agreedSalary && this.agreedSalary > 0) {
     this.platformFee  = Math.round(this.agreedSalary * 0.10);
     this.agencyPayout = this.agreedSalary - this.platformFee;
   }
-  next();
 });
 
 module.exports = mongoose.model('Employment', EmploymentSchema);
