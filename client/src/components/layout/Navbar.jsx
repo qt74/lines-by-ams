@@ -62,6 +62,11 @@ export default function Navbar() {
               <li>
                 <Link to={getDashboardPath()} onClick={close}>{t('nav.dashboard')}</Link>
               </li>
+              {(user.role === 'customer' || user.role === 'agency') && (
+                <li>
+                  <Link to="/messages" onClick={close}>💬 {t('nav.messages', 'Messages')}</Link>
+                </li>
+              )}
               {user.role !== 'admin' && (
                 <li>
                   <Link to={getProfilePath()} className="navbar__profile-link" onClick={close}>

@@ -51,6 +51,26 @@ exports.approveAgency = async (req, res) => {
   }
 };
 
+// @desc  Toggle agency premium status
+// @route PATCH /api/admin/agencies/:id/premium
+exports.togglePremium = async (req, res) => {
+  try {
+    const agency = await Agency.findById(req.params.id);
+    if (!agency) return res.status(404).json({ success: false, message: 'Agency not found' });
+    agency.isPremium = !agency.isPremium;
+    if (agency.isPremium) {
+      // Set premium expiry to 1 year from now by default
+      agency.premiumExpiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+    } else {
+      agency.premiumExpiresAt = null;
+    }
+    await agency.save();
+    res.json({ success: true, agency });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // @desc  Get platform stats
 // @route GET /api/admin/stats
 exports.getStats = async (req, res) => {

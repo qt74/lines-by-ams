@@ -9,6 +9,7 @@ const SKILLS = [
   'Hair Stylist','Fashion Designer','Seamstress / Tailor',
   'Textile Artist','Wardrobe Manager','Brand Ambassador',
   'Social Media Influencer','Art Director','Fashion Illustrator','Pattern Maker',
+  'Boutique Owner','Retail Buyer','Visual Merchandiser',
 ];
 const CONTRACTS    = ['Yearly','Monthly','Hourly'];
 const AVAILABILITY = ['Available','Booked','Unavailable'];
@@ -22,13 +23,15 @@ const EMPTY = {
 
 export default function TalentForm() {
   const { t } = useTranslation();
-  const { id }  = useParams();   // if editing
+  const { id }  = useParams();
   const navigate = useNavigate();
   const isEdit   = Boolean(id);
 
-  const [form,    setForm]    = useState(EMPTY);
-  const [preview, setPreview] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [form,      setForm]      = useState(EMPTY);
+  const [preview,   setPreview]   = useState('');
+  const [portfolio, setPortfolio] = useState([]);
+  const [loading,   setLoading]   = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (isEdit) {
@@ -36,6 +39,7 @@ export default function TalentForm() {
         const tl = r.data.talent;
         setForm({ ...tl, salaryRange: tl.salaryRange || { min:'', max:'' }, photo: null });
         setPreview(tl.photo || '');
+        setPortfolio(tl.portfolio || []);
       }).catch(() => toast.error('Failed to load talent'));
     }
   }, [id]);
@@ -52,6 +56,37 @@ export default function TalentForm() {
     if (!file) return;
     setForm(f => ({ ...f, photo: file }));
     setPreview(URL.createObjectURL(file));
+  };
+
+  // Upload portfolio images (multi-upload, edit mode only)
+  const handlePortfolioUpload = async e => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      files.forEach(f => fd.append('images', f));
+      const res = await api.post(`/talent/${id}/portfolio`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setPortfolio(res.data.portfolio);
+      toast.success(`${files.length} image(s) added to portfolio`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Upload failed');
+    }
+    setUploading(false);
+    e.target.value = '';
+  };
+
+  const handleRemovePortfolioImage = async (imgUrl) => {
+    if (!window.confirm('Remove this image from portfolio?')) return;
+    try {
+      const res = await api.delete(`/talent/${id}/portfolio`, { data: { imageUrl: imgUrl } });
+      setPortfolio(res.data.portfolio);
+      toast.success('Image removed');
+    } catch (err) {
+      toast.error('Failed to remove image');
+    }
   };
 
   const handleSubmit = async e => {
@@ -98,7 +133,7 @@ export default function TalentForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="talent-form" encType="multipart/form-data">
-          {/* PHOTO */}
+          {/* PROFILE PHOTO */}
           <div className="form-photo">
             <div className="form-photo__preview">
               {preview
@@ -187,6 +222,45 @@ export default function TalentForm() {
             </button>
           </div>
         </form>
+
+        {/* PORTFOLIO — edit mode only, separate from main form */}
+        {isEdit && (
+          <div className="portfolio-upload-section">
+            <div className="portfolio-upload-section__header">
+              <h2>Portfolio Gallery</h2>
+              <label className={`btn btn--outline btn--sm ${uploading ? 'disabled' : ''}`} style={{ cursor:'pointer' }}>
+                {uploading ? 'Uploading…' : '+ Add Images'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePortfolioUpload}
+                  disabled={uploading}
+                  style={{ display:'none' }}
+                />
+              </label>
+            </div>
+            <p className="form-hint">Upload multiple portfolio images (JPG, PNG, WebP · max 5MB each)</p>
+
+            {portfolio.length === 0 ? (
+              <p className="portfolio-empty">No portfolio images yet. Add some to showcase this talent's work.</p>
+            ) : (
+              <div className="portfolio-grid portfolio-grid--edit">
+                {portfolio.map((img, i) => (
+                  <div key={i} className="portfolio-grid__item">
+                    <img src={img} alt={`Portfolio ${i + 1}`} />
+                    <button
+                      type="button"
+                      className="portfolio-grid__remove"
+                      onClick={() => handleRemovePortfolioImage(img)}
+                      title="Remove"
+                    >✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );

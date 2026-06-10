@@ -1,6 +1,47 @@
 const Message    = require('../models/Message');
 const Employment = require('../models/Employment');
 const Agency     = require('../models/Agency');
+const User       = require('../models/User');
+
+// @desc  Get inbox — all conversations (employments) for current user with latest message preview
+// @route GET /api/messages
+exports.getInbox = async (req, res) => {
+  try {
+    let employments;
+
+    if (req.user.role === 'customer') {
+      employments = await Employment.find({ customer: req.user._id })
+        .populate('agency', 'agencyName logo')
+        .populate('talent', 'name photo')
+        .sort({ updatedAt: -1 });
+    } else {
+      const agency = await Agency.findOne({ user: req.user._id });
+      employments  = agency
+        ? await Employment.find({ agency: agency._id })
+            .populate('customer', 'name avatar')
+            .populate('talent', 'name photo')
+            .sort({ updatedAt: -1 })
+        : [];
+    }
+
+    // For each employment, grab the latest message + unread count
+    const threads = await Promise.all(
+      employments.map(async emp => {
+        const latest  = await Message.findOne({ employment: emp._id }).sort({ createdAt: -1 });
+        const unread  = await Message.countDocuments({
+          employment: emp._id,
+          receiver:   req.user._id,
+          isRead:     false,
+        });
+        return { employment: emp, latestMessage: latest, unreadCount: unread };
+      })
+    );
+
+    res.json({ success: true, threads });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 // @desc  Send a message
 // @route POST /api/messages

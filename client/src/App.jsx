@@ -25,6 +25,7 @@ const CustomerProfile   = lazy(() => import('./pages/customer/CustomerProfile'))
 const AgencyEmployment  = lazy(() => import('./pages/agency/AgencyEmployment'));
 const AgencyProfile     = lazy(() => import('./pages/agency/AgencyProfile'));
 const AdminDashboard    = lazy(() => import('./pages/admin/AdminDashboard'));
+const Messages          = lazy(() => import('./pages/shared/Messages'));
 
 function Layout({ children }) {
   return (
@@ -52,6 +53,18 @@ export default function App() {
           {/* AUTH */}
           <Route path="/login"    element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* MESSAGES — shared by customer + agency */}
+          <Route path="/messages"          element={
+            <ProtectedRoute roles={['customer','agency']}>
+              <Layout><Messages /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/messages/:empId"   element={
+            <ProtectedRoute roles={['customer','agency']}>
+              <Layout><Messages /></Layout>
+            </ProtectedRoute>
+          } />
 
           {/* CUSTOMER */}
           <Route path="/dashboard" element={
@@ -109,6 +122,7 @@ export default function App() {
             <Layout>
               <div className="container" style={{ padding: '8rem 0', textAlign: 'center' }}>
                 <h1>404 — Page Not Found</h1>
+                <p style={{ color: 'var(--gray-500)', marginTop: '1rem' }}>The page you're looking for doesn't exist.</p>
               </div>
             </Layout>
           } />

@@ -9,6 +9,7 @@ const SKILLS = [
   'Hair Stylist','Fashion Designer','Seamstress / Tailor',
   'Textile Artist','Wardrobe Manager','Brand Ambassador',
   'Social Media Influencer','Art Director','Fashion Illustrator','Pattern Maker',
+  'Boutique Owner','Retail Buyer','Visual Merchandiser',
 ];
 const CONTRACTS     = ['Yearly','Monthly','Hourly'];
 const AVAILABILITY  = ['Available','Booked','Unavailable'];

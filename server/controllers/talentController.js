@@ -67,8 +67,11 @@ exports.createTalent = async (req, res) => {
     if (!agency) return res.status(404).json({ success: false, message: 'Agency profile not found' });
     if (!agency.isApproved) return res.status(403).json({ success: false, message: 'Agency not yet approved by admin' });
 
-    // If a file was uploaded, set its URL (served from /uploads/)
-    const photoUrl = req.file ? `/uploads/${req.file.filename}` : req.body.photo || '';
+    // Cloudinary returns req.file.path as a full https:// URL;
+    // local disk storage gives just a filename → prefix with /uploads/
+    const photoUrl = req.file
+      ? (req.file.path?.startsWith('http') ? req.file.path : `/uploads/${req.file.filename}`)
+      : req.body.photo || '';
 
     // Parse array/nested fields — support both FormData (field[]) and JSON body formats
     const skills        = [].concat(req.body['skills[]']        || req.body.skills        || []);
@@ -103,7 +106,8 @@ exports.updateTalent = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Not your talent profile' });
 
     const updateData = { ...req.body };
-    if (req.file) updateData.photo = `/uploads/${req.file.filename}`;
+    if (req.file) updateData.photo = req.file.path?.startsWith('http')
+      ? req.file.path : `/uploads/${req.file.filename}`;
     if (req.body['skills[]'])        updateData.skills        = [].concat(req.body['skills[]']);
     if (req.body['contractTypes[]']) updateData.contractTypes = [].concat(req.body['contractTypes[]']);
     if (req.body.skills && !req.body['skills[]'])
@@ -140,6 +144,47 @@ exports.deleteTalent = async (req, res) => {
 
     await talent.deleteOne();
     res.json({ success: true, message: 'Talent profile deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// @desc  Add portfolio images to a talent profile
+// @route POST /api/talent/:id/portfolio
+exports.addPortfolioImages = async (req, res) => {
+  try {
+    const agency = await Agency.findOne({ user: req.user._id });
+    const talent = await TalentProfile.findById(req.params.id);
+    if (!talent) return res.status(404).json({ success: false, message: 'Talent not found' });
+    if (String(talent.agency) !== String(agency._id))
+      return res.status(403).json({ success: false, message: 'Not your talent profile' });
+
+    const newImages = (req.files || []).map(f =>
+      f.path?.startsWith('http') ? f.path : `/uploads/${f.filename}`
+    );
+
+    talent.portfolio = [...(talent.portfolio || []), ...newImages];
+    await talent.save();
+    res.json({ success: true, portfolio: talent.portfolio });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// @desc  Remove a portfolio image
+// @route DELETE /api/talent/:id/portfolio
+exports.removePortfolioImage = async (req, res) => {
+  try {
+    const agency = await Agency.findOne({ user: req.user._id });
+    const talent = await TalentProfile.findById(req.params.id);
+    if (!talent) return res.status(404).json({ success: false, message: 'Talent not found' });
+    if (String(talent.agency) !== String(agency._id))
+      return res.status(403).json({ success: false, message: 'Not your talent profile' });
+
+    const { imageUrl } = req.body;
+    talent.portfolio = talent.portfolio.filter(img => img !== imageUrl);
+    await talent.save();
+    res.json({ success: true, portfolio: talent.portfolio });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

@@ -26,7 +26,8 @@ exports.updateAgencyProfile = async (req, res) => {
     if (agencyName)                  updateData.agencyName   = agencyName;
     if (description !== undefined)   updateData.description  = description;
     if (website     !== undefined)   updateData.website      = website;
-    if (req.file)                    updateData.logo         = `/uploads/${req.file.filename}`;
+    if (req.file) updateData.logo = req.file.path?.startsWith('http')
+      ? req.file.path : `/uploads/${req.file.filename}`;
 
     // socialLinks: accept JSON string or object
     if (req.body.socialLinks) {

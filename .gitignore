@@ -1,5 +1,28 @@
+# Dependencies
 node_modules/
-.env
+**/node_modules/
+
+# Build output
 dist/
+build/
+
+# Env files (never commit secrets)
+.env
+.env.local
+.env.production
+.env*.local
+**/.env
+**/.env.local
+
+# Uploads (local only — production uses Cloudinary)
+server/uploads/
+
+# OS / editor
 .DS_Store
+Thumbs.db
 *.log
+.vscode/
+.idea/
+
+# Netlify CLI state
+.netlify/

@@ -4,6 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # VITE_API_URL and VITE_STRIPE_PK are set in Netlify Dashboard
+  # Site Settings → Environment Variables → Add variable
+  # VITE_API_URL = https://linesbyams-api.onrender.com/api
 
 # SPA fallback — all routes serve index.html
 [[redirects]]
