@@ -1,6 +1,8 @@
 const User       = require('../models/User');
 const Agency     = require('../models/Agency');
 const Employment = require('../models/Employment');
+const Shop       = require('../models/Shop');
+const Product    = require('../models/Product');
 
 // @desc  Get all users
 // @route GET /api/admin/users
@@ -75,35 +77,79 @@ exports.togglePremium = async (req, res) => {
 // @route GET /api/admin/stats
 exports.getStats = async (req, res) => {
   try {
-    const [totalUsers, totalAgencies, totalEmployments, completedEmployments] = await Promise.all([
+    const [totalUsers, totalShops, totalProducts, featuredShops] = await Promise.all([
       User.countDocuments(),
-      Agency.countDocuments({ isApproved: true }),
-      Employment.countDocuments(),
-      Employment.countDocuments({ status: 'Completed' }),
+      Shop.countDocuments({ isActive: true }),
+      Product.countDocuments(),
+      Shop.countDocuments({ isPremium: true }),
     ]);
-
-    // Sum platform commission from completed employments
-    const revenueData = await Employment.aggregate([
-      { $match: { status: { $in: ['Full Payment Received', 'Employment Commenced', 'Completed'] } } },
-      { $group: { _id: null, totalRevenue: { $sum: '$platformFee' }, totalVolume: { $sum: '$agreedSalary' } } },
-    ]);
-
-    const revenue = revenueData[0] || { totalRevenue: 0, totalVolume: 0 };
-
-    res.json({
-      success: true,
-      stats: {
-        totalUsers,
-        totalAgencies,
-        totalEmployments,
-        completedEmployments,
-        totalRevenue: revenue.totalRevenue,
-        totalVolume:  revenue.totalVolume,
-      },
-    });
+    res.json({ success: true, totalUsers, totalShops, totalProducts, featuredShops });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
+};
+
+// ── User CRUD ─────────────────────────────────────────────────────────────────
+exports.updateUser = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    res.json({ success: true, user });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+// ── Shop admin CRUD ───────────────────────────────────────────────────────────
+exports.adminGetShops = async (req, res) => {
+  try {
+    const shops = await Shop.find()
+      .populate('owner', 'name email')
+      .populate('productCount')
+      .sort({ createdAt: -1 });
+    res.json({ success: true, shops });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.adminUpdateShop = async (req, res) => {
+  try {
+    const shop = await Shop.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .populate('owner', 'name email');
+    if (!shop) return res.status(404).json({ success: false, message: 'Shop not found' });
+    res.json({ success: true, shop });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.adminDeleteShop = async (req, res) => {
+  try {
+    await Shop.findByIdAndDelete(req.params.id);
+    await Product.deleteMany({ shop: req.params.id });
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+// ── Product admin CRUD ────────────────────────────────────────────────────────
+exports.adminGetProducts = async (req, res) => {
+  try {
+    const products = await Product.find()
+      .populate('shop', 'name')
+      .populate('owner', 'name')
+      .sort({ createdAt: -1 });
+    res.json({ success: true, products });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.adminDeleteProduct = async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
 // @desc  Get all employments

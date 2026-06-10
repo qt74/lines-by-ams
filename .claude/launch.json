@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fashion-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "C:\\Users\\abouz\\OneDrive\\Desktop\\fashion-mission\\client",
+      "port": 5173
+    },
+    {
+      "name": "fashion-backend",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.js"],
+      "cwd": "C:\\Users\\abouz\\OneDrive\\Desktop\\fashion-mission\\server",
+      "port": 5000
+    }
+  ]
+}
