@@ -42,7 +42,7 @@ export default function ProductDetail() {
 
   const acceptedMethods = shop?.paymentMethods?.length
     ? ALL_PAYMENT_METHODS.filter(m => shop.paymentMethods.includes(m.id))
-    : ALL_PAYMENT_METHODS.filter(m => ['cash', 'bank_transfer', 'visa'].includes(m.id));
+    : ALL_PAYMENT_METHODS.filter(m => ['cash', 'apple_pay', 'visa'].includes(m.id));
 
   const buildMsg = () => {
     const base = `Hi! I'm interested in "${product.name}" — ${Number(product.price).toLocaleString()} QAR.`;

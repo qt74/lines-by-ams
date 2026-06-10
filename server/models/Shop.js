@@ -13,7 +13,7 @@ const ShopSchema = new mongoose.Schema({
   whatsapp:    { type: String, trim: true },
   instagram:   { type: String, trim: true },
   location:    { type: String, trim: true, default: 'Qatar' },
-  paymentMethods: { type: [String], default: ['cash', 'bank_transfer'] },
+  paymentMethods: { type: [String], default: ['cash', 'apple_pay', 'visa'] },
 
   isApproved:  { type: Boolean, default: true },  // auto-approve for now
   isPremium:   { type: Boolean, default: false },

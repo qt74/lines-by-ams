@@ -118,7 +118,7 @@ export default function ShopDashboard() {
 
 /* ── Create shop form ─────────────────────────────────────────────────────── */
 function CreateShopForm({ onCreated }) {
-  const [form, setForm] = useState({ name:'', category:'Fashion', description:'', whatsapp:'', instagram:'', location:'Qatar', paymentMethods:['cash','bank_transfer'] });
+  const [form, setForm] = useState({ name:'', category:'Fashion', description:'', whatsapp:'', instagram:'', location:'Qatar', paymentMethods:['cash','apple_pay','visa'] });
   const [saving, setSaving] = useState(false);
   const f = (k) => (e) => setForm(v => ({ ...v, [k]: e.target.value }));
 
