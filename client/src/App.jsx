@@ -33,6 +33,7 @@ const BrowseShops       = lazy(() => import('./pages/shops/BrowseShops'));
 const ShopDetail        = lazy(() => import('./pages/shops/ShopDetail'));
 const ShopDashboard     = lazy(() => import('./pages/shops/ShopDashboard'));
 const ProductDetail     = lazy(() => import('./pages/products/ProductDetail'));
+const ProductEdit       = lazy(() => import('./pages/products/ProductEdit'));
 
 function Layout({ children }) {
   return (
@@ -63,6 +64,11 @@ export default function App() {
           <Route path="/products/:id"  element={<Layout><ProductDetail /></Layout>} />
 
           {/* SHOP OWNER — any authenticated non-admin user can have a shop */}
+          <Route path="/shop/products/:id/edit" element={
+            <ProtectedRoute roles={['customer','agency','admin']}>
+              <Layout><ProductEdit /></Layout>
+            </ProtectedRoute>
+          } />
           <Route path="/shop/dashboard" element={
             <ProtectedRoute roles={['customer','agency','admin']}>
               <Layout><ShopDashboard /></Layout>
