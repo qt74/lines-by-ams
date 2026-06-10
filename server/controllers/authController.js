@@ -17,12 +17,16 @@ exports.register = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid role' });
     }
 
+    // Validate agency-specific fields BEFORE creating user
+    if (role === 'agency' && !agencyName) {
+      return res.status(400).json({ success: false, message: 'Agency name required' });
+    }
+
     const user = await User.create({ name, email, password, role, phone, location });
 
     // If registering as agency, create agency profile
     let agencyProfile = null;
     if (role === 'agency') {
-      if (!agencyName) return res.status(400).json({ success: false, message: 'Agency name required' });
       agencyProfile = await Agency.create({ user: user._id, agencyName, description: description || '' });
     }
 
