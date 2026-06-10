@@ -20,6 +20,7 @@ import AgencyDashboard    from './pages/agency/AgencyDashboard';
 import TalentForm         from './pages/agency/TalentForm';
 
 // Lazily loaded
+const About             = lazy(() => import('./pages/public/About'));
 const TalentDetail      = lazy(() => import('./pages/public/TalentDetail'));
 const EmploymentDetail  = lazy(() => import('./pages/customer/EmploymentDetail'));
 const CustomerProfile   = lazy(() => import('./pages/customer/CustomerProfile'));
@@ -27,6 +28,11 @@ const AgencyEmployment  = lazy(() => import('./pages/agency/AgencyEmployment'));
 const AgencyProfile     = lazy(() => import('./pages/agency/AgencyProfile'));
 const AdminDashboard    = lazy(() => import('./pages/admin/AdminDashboard'));
 const Messages          = lazy(() => import('./pages/shared/Messages'));
+// Shop / Product marketplace
+const BrowseShops       = lazy(() => import('./pages/shops/BrowseShops'));
+const ShopDetail        = lazy(() => import('./pages/shops/ShopDetail'));
+const ShopDashboard     = lazy(() => import('./pages/shops/ShopDashboard'));
+const ProductDetail     = lazy(() => import('./pages/products/ProductDetail'));
 
 function Layout({ children }) {
   return (
@@ -48,9 +54,20 @@ export default function App() {
         <ChatWidget />
         <Routes>
           {/* PUBLIC */}
-          <Route path="/"           element={<Layout><Home /></Layout>} />
-          <Route path="/browse"     element={<Layout><Browse /></Layout>} />
-          <Route path="/talent/:id" element={<Layout><TalentDetail /></Layout>} />
+          <Route path="/"              element={<Layout><Home /></Layout>} />
+          <Route path="/about"         element={<Layout><About /></Layout>} />
+          <Route path="/browse"        element={<Layout><Browse /></Layout>} />
+          <Route path="/talent/:id"    element={<Layout><TalentDetail /></Layout>} />
+          <Route path="/shops"         element={<Layout><BrowseShops /></Layout>} />
+          <Route path="/shops/:id"     element={<Layout><ShopDetail /></Layout>} />
+          <Route path="/products/:id"  element={<Layout><ProductDetail /></Layout>} />
+
+          {/* SHOP OWNER — any authenticated non-admin user can have a shop */}
+          <Route path="/shop/dashboard" element={
+            <ProtectedRoute roles={['customer','agency','admin']}>
+              <Layout><ShopDashboard /></Layout>
+            </ProtectedRoute>
+          } />
 
           {/* AUTH */}
           <Route path="/login"    element={<Login />} />
