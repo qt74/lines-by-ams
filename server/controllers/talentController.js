@@ -70,12 +70,12 @@ exports.createTalent = async (req, res) => {
     // If a file was uploaded, set its URL (served from /uploads/)
     const photoUrl = req.file ? `/uploads/${req.file.filename}` : req.body.photo || '';
 
-    // Parse array fields sent as FormData (field[] format)
+    // Parse array/nested fields — support both FormData (field[]) and JSON body formats
     const skills        = [].concat(req.body['skills[]']        || req.body.skills        || []);
     const contractTypes = [].concat(req.body['contractTypes[]'] || req.body.contractTypes || []);
     const salaryRange   = {
-      min: Number(req.body['salaryRange[min]'] || 0),
-      max: Number(req.body['salaryRange[max]'] || 0),
+      min: Number(req.body['salaryRange[min]'] ?? req.body.salaryRange?.min ?? 0),
+      max: Number(req.body['salaryRange[max]'] ?? req.body.salaryRange?.max ?? 0),
     };
 
     const talent = await TalentProfile.create({
@@ -106,10 +106,19 @@ exports.updateTalent = async (req, res) => {
     if (req.file) updateData.photo = `/uploads/${req.file.filename}`;
     if (req.body['skills[]'])        updateData.skills        = [].concat(req.body['skills[]']);
     if (req.body['contractTypes[]']) updateData.contractTypes = [].concat(req.body['contractTypes[]']);
+    if (req.body.skills && !req.body['skills[]'])
+      updateData.skills = [].concat(req.body.skills);
+    if (req.body.contractTypes && !req.body['contractTypes[]'])
+      updateData.contractTypes = [].concat(req.body.contractTypes);
     if (req.body['salaryRange[min]'] !== undefined) {
       updateData.salaryRange = {
         min: Number(req.body['salaryRange[min]']),
         max: Number(req.body['salaryRange[max]'] || 0),
+      };
+    } else if (req.body.salaryRange) {
+      updateData.salaryRange = {
+        min: Number(req.body.salaryRange.min || 0),
+        max: Number(req.body.salaryRange.max || 0),
       };
     }
     const updated = await TalentProfile.findByIdAndUpdate(req.params.id, updateData, { new: true });
