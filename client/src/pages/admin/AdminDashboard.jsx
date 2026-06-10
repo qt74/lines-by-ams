@@ -20,10 +20,10 @@ export default function AdminDashboard() {
           </aside>
           <div className="admin-main">
             <Routes>
-              <Route path="/"            element={<AdminOverview />} />
-              <Route path="/agencies"    element={<AdminAgencies />} />
-              <Route path="/users"       element={<AdminUsers />} />
-              <Route path="/employments" element={<AdminEmployments />} />
+              <Route index                 element={<AdminOverview />} />
+              <Route path="agencies"       element={<AdminAgencies />} />
+              <Route path="users"          element={<AdminUsers />} />
+              <Route path="employments"    element={<AdminEmployments />} />
             </Routes>
           </div>
         </div>
