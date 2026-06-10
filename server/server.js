@@ -59,6 +59,7 @@ app.use('/api/agencies',   require('./routes/agencies'));
 app.use('/api/employment', require('./routes/employment'));
 app.use('/api/messages',   require('./routes/messages'));
 app.use('/api/admin',      require('./routes/admin'));
+app.use('/api/chat',       require('./routes/chat'));
 
 // ─── Health check ─────────────────────────────────────────
 app.get('/api/health', (req, res) => res.json({ status: 'OK', env: process.env.NODE_ENV }));

@@ -8,6 +8,7 @@ import './index.css';
 import Navbar         from './components/layout/Navbar';
 import Footer         from './components/layout/Footer';
 import ProtectedRoute from './components/ui/ProtectedRoute';
+import ChatWidget     from './components/ui/ChatWidget';
 
 // Eagerly loaded (critical path)
 import Home               from './pages/public/Home';
@@ -44,6 +45,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
+        <ChatWidget />
         <Routes>
           {/* PUBLIC */}
           <Route path="/"           element={<Layout><Home /></Layout>} />
