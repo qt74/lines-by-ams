@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <main className="auth-page">
       <div className="auth-card">
-        <Link to="/" className="auth-card__logo">Fashion Mission</Link>
+        <Link to="/" className="auth-card__logo">Lines By AMS</Link>
         <h1 className="auth-card__title">{t('auth.loginTitle')}</h1>
 
         <form onSubmit={handleSubmit} className="auth-form">

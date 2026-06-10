@@ -73,4 +73,4 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Fashion Mission API running on port ${PORT} [${process.env.NODE_ENV}]`));
+app.listen(PORT, () => console.log(`Lines By AMS API running on port ${PORT} [${process.env.NODE_ENV}]`));

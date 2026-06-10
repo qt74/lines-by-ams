@@ -74,7 +74,7 @@ export default function Home() {
       <section className="cta-banner">
         <div className="container cta-banner__inner">
           <h2>Are you a fashion agency?</h2>
-          <p>List your talent, manage hirings, and grow your business on Fashion Mission.</p>
+          <p>List your talent, manage hirings, and grow your business on Lines By AMS.</p>
           <Link to="/register" className="btn btn--solid btn--lg">Register Your Agency</Link>
         </div>
       </section>

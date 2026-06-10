@@ -5,7 +5,7 @@
  *   node scripts/seedAdmin.js
  *
  * Override credentials via env:
- *   ADMIN_NAME="Super Admin" ADMIN_EMAIL=admin@fashionmission.qa ADMIN_PASS=Secure123! node scripts/seedAdmin.js
+ *   ADMIN_NAME="Super Admin" ADMIN_EMAIL=admin@linesbyams.qa ADMIN_PASS=Secure123! node scripts/seedAdmin.js
  */
 
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 const bcrypt   = require('bcryptjs');
 
 const ADMIN_NAME  = process.env.ADMIN_NAME  || 'Super Admin';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@fashionmission.qa';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@linesbyams.qa';
 const ADMIN_PASS  = process.env.ADMIN_PASS  || 'Admin@FM2024!';
 
 // ── Inline User schema (avoids circular require issues) ──────────────────────

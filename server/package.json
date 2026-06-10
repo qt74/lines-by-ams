@@ -1,7 +1,7 @@
 {
   "name": "fashion-mission-server",
   "version": "1.0.0",
-  "description": "Fashion Mission API — Node.js + Express + MongoDB",
+  "description": "Lines By AMS API — Node.js + Express + MongoDB",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

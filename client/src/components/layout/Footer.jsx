@@ -18,13 +18,13 @@ export default function Footer() {
         </div>
         <div className="footer__col">
           <h4>Contact</h4>
-          <a href="mailto:hello@fashionmission.qa">hello@fashionmission.qa</a>
+          <a href="mailto:hello@linesbyams.qa">hello@linesbyams.qa</a>
           <a href="https://wa.me/97412345678" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="https://www.instagram.com/fashionmission" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.instagram.com/linesbyams" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
       <div className="footer__bottom container">
-        <span>© {new Date().getFullYear()} Fashion Mission. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Lines By AMS. All rights reserved.</span>
       </div>
     </footer>
   );

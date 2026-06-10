@@ -104,7 +104,7 @@ exports.initAdmin = async (req, res) => {
     if (adminExists) {
       return res.status(400).json({ success: false, message: 'Admin already exists. Use /login.' });
     }
-    const { name = 'Super Admin', email = 'admin@fashionmission.qa', password = 'Admin@FM2024!' } = req.body;
+    const { name = 'Super Admin', email = 'admin@linesbyams.qa', password = 'Admin@FM2024!' } = req.body;
     const admin = await User.create({ name, email, password, role: 'admin' });
     const token = generateToken(admin._id);
     res.status(201).json({

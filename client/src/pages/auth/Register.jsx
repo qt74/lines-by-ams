@@ -38,7 +38,7 @@ export default function Register() {
   return (
     <main className="auth-page">
       <div className="auth-card auth-card--wide">
-        <Link to="/" className="auth-card__logo">Fashion Mission</Link>
+        <Link to="/" className="auth-card__logo">Lines By AMS</Link>
         <h1 className="auth-card__title">{t('auth.registerTitle')}</h1>
 
         {/* ROLE SELECTOR */}
