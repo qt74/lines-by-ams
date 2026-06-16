@@ -9,6 +9,8 @@
 const User    = require('./models/User');
 const Shop    = require('./models/Shop');
 const Product = require('./models/Product');
+const Agency        = require('./models/Agency');
+const TalentProfile = require('./models/TalentProfile');
 
 const IMG = {
   abaya1:   'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
@@ -22,7 +24,52 @@ const IMG = {
   scarf:    'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=800&q=80',
   cover1:   'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80',
   cover2:   'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80',
+  // Talent portraits
+  model_f1: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80',
+  model_m1: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80',
+  model_f2: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80',
+  makeup:   'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80',
+  photog:   'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&q=80',
+  stylist:  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80',
+  designer: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',
+  model_m2: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80',
 };
+
+// Fashion talent agencies, each with their roster of talent
+const AGENCIES = [
+  {
+    agencyName: 'Elite Models Qatar', email: 'elite@linesbyams.qa',
+    description: 'Qatar’s premier modelling agency representing top runway and editorial talent.',
+    isPremium: true,
+    instagram: '@elitemodelsqatar', whatsapp: '+97455100001',
+    talent: [
+      { name: 'Sara Al-Mansouri', nameAr: 'سارة المنصوري', photo: 'model_f1', location: 'Doha, Qatar', experience: 6, availability: 'Available', skills: ['Model','Brand Ambassador'], contractTypes: ['Yearly','Monthly'], salaryRange: { min: 8000, max: 15000 }, bio: 'Runway and editorial model with international campaign experience across the GCC.' },
+      { name: 'Omar Khalid', nameAr: 'عمر خالد', photo: 'model_m1', location: 'Doha, Qatar', experience: 4, availability: 'Available', skills: ['Model','Brand Ambassador'], contractTypes: ['Monthly','Hourly'], salaryRange: { min: 6000, max: 12000 }, bio: 'Menswear and commercial model, face of several regional fashion brands.' },
+      { name: 'Layla Hassan', nameAr: 'ليلى حسن', photo: 'model_f2', location: 'Lusail, Qatar', experience: 8, availability: 'Booked', skills: ['Model'], contractTypes: ['Yearly'], salaryRange: { min: 10000, max: 18000 }, bio: 'Senior fashion model specialising in haute couture and luxury campaigns.' },
+    ],
+  },
+  {
+    agencyName: 'Doha Talent House', email: 'dohatalent@linesbyams.qa',
+    description: 'Full-service creative talent house — makeup, photography and styling for fashion shoots.',
+    isPremium: false,
+    instagram: '@dohatalenthouse', whatsapp: '+97455100002',
+    talent: [
+      { name: 'Fatima Noor', nameAr: 'فاطمة نور', photo: 'makeup', location: 'Doha, Qatar', experience: 7, availability: 'Available', skills: ['Makeup Artist','Hair Stylist'], contractTypes: ['Monthly','Hourly'], salaryRange: { min: 4000, max: 9000 }, bio: 'Editorial makeup artist for fashion week shows and bridal campaigns.' },
+      { name: 'Yousef Ahmed', nameAr: 'يوسف أحمد', photo: 'photog', location: 'Al Rayyan, Qatar', experience: 9, availability: 'Available', skills: ['Photographer','Videographer'], contractTypes: ['Monthly','Hourly'], salaryRange: { min: 5000, max: 14000 }, bio: 'Fashion photographer and videographer with a sharp editorial eye.' },
+      { name: 'Aisha Rahman', nameAr: 'عائشة رحمن', photo: 'stylist', location: 'Doha, Qatar', experience: 5, availability: 'Available', skills: ['Stylist','Wardrobe Manager'], contractTypes: ['Monthly'], salaryRange: { min: 4500, max: 10000 }, bio: 'Wardrobe stylist for shoots, runway and personal styling clients.' },
+    ],
+  },
+  {
+    agencyName: 'Mirage Creative Agency', email: 'mirage@linesbyams.qa',
+    description: 'Design-led agency representing fashion designers, art directors and influencers.',
+    isPremium: true,
+    instagram: '@miragecreative', whatsapp: '+97455100003',
+    talent: [
+      { name: 'Khalid Mansour', nameAr: 'خالد منصور', photo: 'designer', location: 'Doha, Qatar', experience: 11, availability: 'Available', skills: ['Fashion Designer','Art Director'], contractTypes: ['Yearly','Monthly'], salaryRange: { min: 12000, max: 25000 }, bio: 'Award-winning fashion designer and creative director for luxury labels.' },
+      { name: 'Noor Salem', nameAr: 'نور سالم', photo: 'model_m2', location: 'Lusail, Qatar', experience: 3, availability: 'Available', skills: ['Social Media Influencer','Brand Ambassador'], contractTypes: ['Monthly','Hourly'], salaryRange: { min: 3000, max: 8000 }, bio: 'Fashion content creator and brand ambassador with a strong Gulf following.' },
+    ],
+  },
+];
 
 const SHOPS = [
   {
@@ -151,6 +198,38 @@ async function seedDatabase() {
     }
 
     console.log(`[seed] ✓ Seeded ${shopCount} shops and ${prodCount} products.`);
+
+    // 4) Fashion talent agencies + their talent rosters
+    let agencyCount = 0, talentCount = 0;
+    for (const a of AGENCIES) {
+      const { talent, email, instagram, whatsapp, isPremium, agencyName, description } = a;
+      // Agency-owner user account
+      let agencyUser = await User.findOne({ email });
+      if (!agencyUser) {
+        agencyUser = await User.create({
+          name: agencyName, email, password: 'agency123456',
+          role: 'agency', location: 'Doha, Qatar',
+        });
+      }
+      const agency = await Agency.create({
+        user: agencyUser._id, agencyName, description,
+        isPremium, isApproved: true,
+        socialLinks: { instagram, whatsapp },
+      });
+      agencyCount++;
+      for (const t of talent) {
+        const { photo, ...rest } = t;
+        await TalentProfile.create({
+          ...rest,
+          photo: IMG[photo] || '',
+          portfolio: [IMG[photo] || ''],
+          agency: agency._id,
+        });
+        talentCount++;
+      }
+    }
+
+    console.log(`[seed] ✓ Seeded ${agencyCount} agencies and ${talentCount} talent profiles.`);
   } catch (err) {
     console.error('[seed] Seeding failed:', err.message);
   }
