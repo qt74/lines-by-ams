@@ -102,14 +102,16 @@ const SHOPS = [
   {
     name: 'Mariam Couture', nameAr: 'مريم كوتور',
     category: 'Fashion', location: 'Al Wakrah, Qatar',
-    description: 'Evening gowns and occasion wear designed for the modern Gulf woman.',
-    descriptionAr: 'فساتين سهرة وأزياء مناسبات للمرأة الخليجية العصرية.',
+    description: 'Hand-beaded couture evening gowns, made to order for the modern Gulf woman.',
+    descriptionAr: 'فساتين سهرة كوتور مطرزة يدويًا، تُفصّل حسب الطلب للمرأة الخليجية العصرية.',
     whatsapp: '+97455003456', instagram: '@mariam_couture',
-    coverImage: IMG.dress, isPremium: false,
+    coverImage: '/designs/couture-2.png', isPremium: true,
     paymentMethods: ['cash', 'visa', 'mastercard', 'paypal'],
     products: [
-      { name: 'Emerald Evening Gown', nameAr: 'فستان سهرة زمردي', price: 950, comparePrice: 1200, category: 'Fashion', images: [IMG.dress], description: 'Floor-length emerald gown with beaded bodice. Made to order.' },
-      { name: 'Champagne Kaftan', nameAr: 'قفطان شمبانيا', price: 540, category: 'Fashion', images: [IMG.dress], description: 'Flowing champagne kaftan with gold trim. One size.' },
+      { name: 'Pearl Constellation Gown', nameAr: 'فستان كوكبة اللؤلؤ', price: 4500, comparePrice: 5800, category: 'Fashion', images: ['/designs/couture-1.png'], description: 'Off-shoulder mermaid gown with hand-applied pearl and crystal fan beadwork over sheer sleeves. Made to order.' },
+      { name: 'Golden Fan Couture Gown', nameAr: 'فستان المروحة الذهبي', price: 5200, category: 'Fashion', images: ['/designs/couture-2.png'], description: 'Gilded fan-pattern beaded bodice flowing into a finely pleated champagne skirt. A signature atelier piece.' },
+      { name: 'Champagne Cascade Gown', nameAr: 'فستان شامبين المتدفق', price: 4800, category: 'Fashion', images: ['/designs/couture-3.png'], description: 'Sweetheart beaded bodice with a high front slit and cascading pleated train. Couture, made to measure.' },
+      { name: 'Ruby Starlight Gown', nameAr: 'فستان نجمة الياقوت', price: 6500, category: 'Fashion', images: ['/designs/couture-4.png'], description: 'Golden lattice beadwork set with ruby-toned gemstones, finished with a dramatic pleated slit skirt.' },
     ],
   },
   {
