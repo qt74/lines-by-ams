@@ -6,9 +6,10 @@ const morgan     = require('morgan');
 const rateLimit  = require('express-rate-limit');
 const path       = require('path');
 const connectDB  = require('./config/db');
+const seedDatabase = require('./seed');
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB, then seed sample data if the DB is empty
+connectDB().then(() => seedDatabase());
 
 const app = express();
 
