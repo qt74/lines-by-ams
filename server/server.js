@@ -42,19 +42,32 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // ─── CORS ─────────────────────────────────────────────────
-const allowedOrigins = [
+// CLIENT_URL / ADMIN_URL may be comma-separated lists of exact origins.
+const explicitOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:4173',
-  process.env.CLIENT_URL,
-  process.env.ADMIN_URL,
-].filter(Boolean);
+  ...(process.env.CLIENT_URL || '').split(','),
+  ...(process.env.ADMIN_URL || '').split(','),
+].map(s => s.trim()).filter(Boolean);
+
+// Also trust our hosting platforms by pattern so preview/production URLs work
+// without re-deploying the backend each time the frontend URL changes.
+const trustedHostPatterns = [
+  /\.netlify\.app$/,
+  /\.vercel\.app$/,
+  /\.pages\.dev$/,        // Cloudflare Pages
+];
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow requests with no origin (Postman, server-to-server)
+    // Allow requests with no origin (Postman, server-to-server, health checks)
     if (!origin) return cb(null, true);
-    if (allowedOrigins.includes(origin)) return cb(null, true);
+    if (explicitOrigins.includes(origin)) return cb(null, true);
+    try {
+      const host = new URL(origin).hostname;
+      if (trustedHostPatterns.some(re => re.test(host))) return cb(null, true);
+    } catch { /* malformed origin */ }
     cb(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
