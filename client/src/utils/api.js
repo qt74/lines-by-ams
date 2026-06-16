@@ -1,4 +1,9 @@
 import axios from 'axios';
+import { demoResponse } from './demoData';
+
+// Showcase mode: no backend (e.g. GitHub Pages). GET requests fall back to
+// bundled demo data so visitors can still browse shops & products.
+const DEMO = import.meta.env.VITE_DEMO === 'true';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -16,7 +21,13 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
   res => res,
   err => {
-    if (err.response?.status === 401) {
+    // Showcase mode: serve bundled demo data for GET requests when the API
+    // is unavailable, so browsing works without a backend.
+    if (DEMO && (err.config?.method || 'get').toLowerCase() === 'get') {
+      const body = demoResponse(err.config?.url || '');
+      if (body) return Promise.resolve({ data: body, status: 200, demo: true });
+    }
+    if (!DEMO && err.response?.status === 401) {
       localStorage.removeItem('fm_token');
       window.location.href = '/login';
     }

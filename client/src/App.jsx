@@ -1,4 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route } from 'react-router-dom';
+
+// Showcase builds (GitHub Pages) use hash routing to avoid SPA 404s on a
+// project sub-path; normal dev/prod keep clean BrowserRouter URLs.
+const Router = import.meta.env.VITE_USE_HASH === 'true' ? HashRouter : BrowserRouter;
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { lazy, Suspense } from 'react';
@@ -50,7 +54,7 @@ function Layout({ children }) {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <Router>
         <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
         <ChatWidget />
         <Routes>
@@ -152,7 +156,7 @@ export default function App() {
             </Layout>
           } />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </AuthProvider>
   );
 }
