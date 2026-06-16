@@ -4,11 +4,9 @@ import { useTranslation } from 'react-i18next';
 const PAYMENT_ICONS = [
   { id: 'visa',         label: 'Visa',         svg: 'V' },
   { id: 'mastercard',   label: 'Mastercard',   svg: 'M' },
+  { id: 'paypal',       label: 'PayPal',       svg: 'P' },
   { id: 'apple_pay',    label: 'Apple Pay',    svg: '🍎' },
   { id: 'google_pay',   label: 'Google Pay',   svg: 'G' },
-  { id: 'mada',         label: 'mada',         svg: 'م' },
-  { id: 'tabby',        label: 'Tabby',        svg: 'T' },
-  { id: 'tamara',       label: 'Tamara',       svg: 'T' },
   { id: 'cash',         label: 'Cash',         svg: '💵' },
 ];
 

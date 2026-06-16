@@ -187,11 +187,9 @@ export default function Home() {
             {[
               { id:'visa',        label:'Visa',        badge:'VISA' },
               { id:'mastercard',  label:'Mastercard',  badge:'MC' },
+              { id:'paypal',      label:'PayPal',      badge:'PayPal' },
               { id:'apple_pay',   label:'Apple Pay',   badge:'🍎 Pay' },
               { id:'google_pay',  label:'Google Pay',  badge:'G Pay' },
-              { id:'mada',        label:'mada',        badge:'مدى' },
-              { id:'tabby',       label:'Tabby',       badge:'tabby' },
-              { id:'tamara',      label:'Tamara',      badge:'tamara' },
               { id:'cash',        label:'Cash',        badge:'💵 Cash' },
             ].map(({ id, label, badge }) => (
               <div key={id} className="payment-badge" title={label}>{badge}</div>

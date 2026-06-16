@@ -4,15 +4,12 @@ import { useTranslation } from 'react-i18next';
 import api from '../../utils/api';
 
 const ALL_PAYMENT_METHODS = [
-  { id: 'apple_pay',     label: 'Apple Pay',    icon: '🍎' },
-  { id: 'google_pay',    label: 'Google Pay',   icon: 'G Pay' },
   { id: 'visa',          label: 'Visa',         icon: 'VISA' },
   { id: 'mastercard',    label: 'Mastercard',   icon: 'MC' },
-  { id: 'mada',          label: 'mada',         icon: 'مدى' },
+  { id: 'paypal',        label: 'PayPal',       icon: 'PayPal' },
+  { id: 'apple_pay',     label: 'Apple Pay',    icon: '🍎' },
+  { id: 'google_pay',    label: 'Google Pay',   icon: 'G Pay' },
   { id: 'cash',          label: 'Cash',         icon: '💵' },
-  { id: 'bank_transfer', label: 'Bank Transfer', icon: '🏦' },
-  { id: 'tabby',         label: 'Tabby',        icon: 'tabby' },
-  { id: 'tamara',        label: 'Tamara',       icon: 'tamara' },
 ];
 
 export default function ProductDetail() {

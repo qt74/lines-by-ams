@@ -32,7 +32,7 @@ const SHOPS = [
     descriptionAr: 'عبايات وأزياء محتشمة مصنوعة يدويًا من قلب الدوحة.',
     whatsapp: '+97455001234', instagram: '@nour_abayas',
     coverImage: IMG.cover1, isPremium: true,
-    paymentMethods: ['cash', 'apple_pay', 'visa', 'mada'],
+    paymentMethods: ['cash', 'apple_pay', 'visa', 'mastercard'],
     products: [
       { name: 'Handmade Abaya — Pearl White', nameAr: 'عباية مصنوعة يدويًا — أبيض لؤلؤي', price: 450, comparePrice: 600, category: 'Abayas', images: [IMG.abaya1], description: 'A stunning pearl-white abaya with hand-embroidered gold detail. Ethically handcrafted in Doha. Sizes XS–XL.' },
       { name: 'Classic Black Abaya', nameAr: 'عباية سوداء كلاسيكية', price: 380, category: 'Abayas', images: [IMG.abaya2], description: 'Timeless black abaya in flowing crepe fabric. Everyday elegance.' },
@@ -59,7 +59,7 @@ const SHOPS = [
     descriptionAr: 'فساتين سهرة وأزياء مناسبات للمرأة الخليجية العصرية.',
     whatsapp: '+97455003456', instagram: '@mariam_couture',
     coverImage: IMG.cover1, isPremium: false,
-    paymentMethods: ['cash', 'visa', 'mastercard', 'tabby'],
+    paymentMethods: ['cash', 'visa', 'mastercard', 'paypal'],
     products: [
       { name: 'Emerald Evening Gown', nameAr: 'فستان سهرة زمردي', price: 950, comparePrice: 1200, category: 'Fashion', images: [IMG.dress], description: 'Floor-length emerald gown with beaded bodice. Made to order.' },
       { name: 'Champagne Kaftan', nameAr: 'قفطان شمبانيا', price: 540, category: 'Fashion', images: [IMG.dress], description: 'Flowing champagne kaftan with gold trim. One size.' },
@@ -85,7 +85,7 @@ const SHOPS = [
     descriptionAr: 'مجوهرات مطلية بالذهب واللؤلؤ، صناعة قطرية يدوية.',
     whatsapp: '+97455005678', instagram: '@aisha_jewellery',
     coverImage: IMG.cover1, isPremium: false,
-    paymentMethods: ['cash', 'apple_pay', 'mada', 'tamara'],
+    paymentMethods: ['cash', 'apple_pay', 'visa', 'paypal'],
     products: [
       { name: 'Pearl Drop Earrings', nameAr: 'أقراط لؤلؤ متدلية', price: 180, category: 'Jewellery', images: [IMG.jewel], description: 'Freshwater pearl drops on gold-plated hooks.' },
       { name: 'Gold Layered Necklace', nameAr: 'عقد ذهبي متعدد الطبقات', price: 220, comparePrice: 280, category: 'Jewellery', images: [IMG.jewel], description: 'Three-layer gold-plated chain necklace. Tarnish-resistant.' },

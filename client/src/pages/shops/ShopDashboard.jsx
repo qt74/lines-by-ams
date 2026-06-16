@@ -172,15 +172,12 @@ function CreateShopForm({ onCreated }) {
 }
 
 const PAYMENT_OPTIONS = [
-  { id:'apple_pay',    label:'Apple Pay'    },
-  { id:'google_pay',   label:'Google Pay'   },
   { id:'visa',         label:'Visa'         },
   { id:'mastercard',   label:'Mastercard'   },
-  { id:'mada',         label:'mada'         },
+  { id:'paypal',       label:'PayPal'       },
+  { id:'apple_pay',    label:'Apple Pay'    },
+  { id:'google_pay',   label:'Google Pay'   },
   { id:'cash',         label:'Cash'         },
-  { id:'bank_transfer',label:'Bank Transfer'},
-  { id:'tabby',        label:'Tabby'        },
-  { id:'tamara',       label:'Tamara'       },
 ];
 
 /* ── Shop settings form ───────────────────────────────────────────────────── */

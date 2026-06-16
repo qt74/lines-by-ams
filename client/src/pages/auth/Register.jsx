@@ -72,7 +72,8 @@ export default function Register() {
           </div>
           <div className="auth-form__row">
             <label>{t('auth.password')}
-              <input type="password" required minLength={6} value={form.password}
+              <input type="password" required minLength={8} value={form.password}
+                placeholder="At least 8 characters"
                 onChange={e => set('password', e.target.value)} />
             </label>
             <label>{t('auth.phone')}
