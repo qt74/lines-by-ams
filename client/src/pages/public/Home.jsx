@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../../utils/api';
+import TalentCard from '../../components/ui/TalentCard';
 
 const CATEGORIES = [
   { labelKey: 'Abayas',        labelAr: 'عبايات',      emoji: '🪷' },
@@ -19,9 +20,15 @@ export default function Home() {
   const isAr = i18n.language === 'ar';
   const [shops,    setShops]    = useState([]);
   const [products, setProducts] = useState([]);
-  const [stats,    setStats]    = useState({ shops: 0, products: 0 });
+  const [talent,   setTalent]   = useState([]);
+  const [stats,    setStats]    = useState({ shops: 0, products: 0, talent: 0 });
 
   useEffect(() => {
+    api.get('/talent?limit=8').then(r => {
+      setTalent(r.data.talent || []);
+      setStats(s => ({ ...s, talent: r.data.total || r.data.talent?.length || 0 }));
+    }).catch(() => {});
+
     api.get('/shops?limit=6&approved=true').then(r => {
       setShops(r.data.shops || []);
       setStats(s => ({ ...s, shops: r.data.total || r.data.shops?.length || 0 }));
@@ -53,13 +60,13 @@ export default function Home() {
       <section className="stats-bar">
         <div className="container stats-bar__inner">
           <div className="stats-bar__item">
-            <span className="stats-bar__num">{stats.shops > 0 ? stats.shops : '50+'}</span>
-            <span className="stats-bar__label">{t('home.statsShops')}</span>
+            <span className="stats-bar__num">{stats.talent > 0 ? stats.talent : '50+'}</span>
+            <span className="stats-bar__label">{isAr ? 'موهبة فاشن' : 'Fashion Talent'}</span>
           </div>
           <div className="stats-bar__divider" />
           <div className="stats-bar__item">
-            <span className="stats-bar__num">{stats.products > 0 ? stats.products : '500+'}</span>
-            <span className="stats-bar__label">{t('home.statsProducts')}</span>
+            <span className="stats-bar__num">{stats.shops > 0 ? stats.shops : '20+'}</span>
+            <span className="stats-bar__label">{t('home.statsShops')}</span>
           </div>
           <div className="stats-bar__divider" />
           <div className="stats-bar__item">
@@ -90,8 +97,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURED SHOPS ── */}
+      {/* ── FEATURED TALENT ── */}
       <section className="section">
+        <div className="container">
+          <div className="section__header">
+            <h2 className="section__title">{isAr ? 'أبرز المواهب' : 'Featured Talent'}</h2>
+            <Link to="/browse" className="btn btn--ghost btn--sm">{isAr ? 'تصفّح الكل' : 'View all talent'}</Link>
+          </div>
+          {talent.length > 0 ? (
+            <div className="talent-grid">
+              {talent.slice(0, 8).map(tp => <TalentCard key={tp._id} talent={tp} />)}
+            </div>
+          ) : (
+            <div className="home-empty-state">
+              <p>{isAr ? 'لا توجد مواهب بعد.' : 'No talent listed yet.'} <Link to="/browse">{isAr ? 'تصفّح المواهب' : 'Browse talent'}</Link></p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── FEATURED SHOPS ── */}
+      <section className="section section--alt">
         <div className="container">
           <div className="section__header">
             <h2 className="section__title">{t('home.featuredShops')}</h2>
