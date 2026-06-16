@@ -31,7 +31,7 @@ const SHOPS = [
     description: 'Handcrafted abayas and modest wear from the heart of Doha. Each piece made with love.',
     descriptionAr: 'عبايات وأزياء محتشمة مصنوعة يدويًا من قلب الدوحة.',
     whatsapp: '+97455001234', instagram: '@nour_abayas',
-    coverImage: IMG.cover1, isPremium: true,
+    coverImage: IMG.abaya2, isPremium: true,
     paymentMethods: ['cash', 'apple_pay', 'visa', 'mastercard'],
     products: [
       { name: 'Handmade Abaya — Pearl White', nameAr: 'عباية مصنوعة يدويًا — أبيض لؤلؤي', price: 450, comparePrice: 600, category: 'Abayas', images: [IMG.abaya1], description: 'A stunning pearl-white abaya with hand-embroidered gold detail. Ethically handcrafted in Doha. Sizes XS–XL.' },
@@ -45,7 +45,7 @@ const SHOPS = [
     description: 'Authentic Arabian oud and modern fragrances, blended in small batches.',
     descriptionAr: 'عود عربي أصيل وعطور عصرية بكميات محدودة.',
     whatsapp: '+97455002345', instagram: '@layla_perfumes',
-    coverImage: IMG.cover2, isPremium: true,
+    coverImage: IMG.perfume, isPremium: true,
     paymentMethods: ['cash', 'apple_pay', 'google_pay', 'visa'],
     products: [
       { name: 'Royal Oud — 50ml', nameAr: 'عود ملكي — ٥٠ مل', price: 320, comparePrice: 400, category: 'Perfumes', images: [IMG.perfume], description: 'Deep, smoky oud with amber and rose. Long-lasting attar.' },
@@ -58,7 +58,7 @@ const SHOPS = [
     description: 'Evening gowns and occasion wear designed for the modern Gulf woman.',
     descriptionAr: 'فساتين سهرة وأزياء مناسبات للمرأة الخليجية العصرية.',
     whatsapp: '+97455003456', instagram: '@mariam_couture',
-    coverImage: IMG.cover1, isPremium: false,
+    coverImage: IMG.dress, isPremium: false,
     paymentMethods: ['cash', 'visa', 'mastercard', 'paypal'],
     products: [
       { name: 'Emerald Evening Gown', nameAr: 'فستان سهرة زمردي', price: 950, comparePrice: 1200, category: 'Fashion', images: [IMG.dress], description: 'Floor-length emerald gown with beaded bodice. Made to order.' },
@@ -71,7 +71,7 @@ const SHOPS = [
     description: 'Handpicked leather bags and clutches. Quality that lasts.',
     descriptionAr: 'حقائب جلدية مختارة بعناية تدوم طويلاً.',
     whatsapp: '+97455004567', instagram: '@doha_bags',
-    coverImage: IMG.cover2, isPremium: false,
+    coverImage: IMG.bag, isPremium: false,
     paymentMethods: ['cash', 'apple_pay', 'visa'],
     products: [
       { name: 'Leather Tote — Tan', nameAr: 'حقيبة جلدية — بني', price: 280, category: 'Bags & Purses', images: [IMG.bag], description: 'Spacious genuine-leather tote in warm tan. Fits a laptop.' },
@@ -84,7 +84,7 @@ const SHOPS = [
     description: 'Delicate gold-plated and pearl jewellery, handmade in Qatar.',
     descriptionAr: 'مجوهرات مطلية بالذهب واللؤلؤ، صناعة قطرية يدوية.',
     whatsapp: '+97455005678', instagram: '@aisha_jewellery',
-    coverImage: IMG.cover1, isPremium: false,
+    coverImage: IMG.jewel, isPremium: false,
     paymentMethods: ['cash', 'apple_pay', 'visa', 'paypal'],
     products: [
       { name: 'Pearl Drop Earrings', nameAr: 'أقراط لؤلؤ متدلية', price: 180, category: 'Jewellery', images: [IMG.jewel], description: 'Freshwater pearl drops on gold-plated hooks.' },
@@ -97,7 +97,7 @@ const SHOPS = [
     description: 'Adorable, comfortable outfits for little ones aged 0–8.',
     descriptionAr: 'ملابس مريحة وجميلة للأطفال من ٠ إلى ٨ سنوات.',
     whatsapp: '+97455006789', instagram: '@little_stars_qa',
-    coverImage: IMG.cover2, isPremium: false,
+    coverImage: IMG.kids, isPremium: false,
     paymentMethods: ['cash', 'visa', 'google_pay'],
     products: [
       { name: 'Kids Eid Outfit Set', nameAr: 'طقم عيد للأطفال', price: 160, comparePrice: 210, category: 'Kids Fashion', images: [IMG.kids], description: 'Two-piece festive set with embroidered vest. Ages 2–6.' },
