@@ -1,6 +1,7 @@
 const User          = require('../models/User');
 const Agency        = require('../models/Agency');
 const generateToken = require('../utils/generateToken');
+const mailer        = require('../utils/mailer');
 
 // @desc  Register user (customer or agency)
 // @route POST /api/auth/register
@@ -41,6 +42,8 @@ exports.register = async (req, res) => {
       agencyProfile = await Agency.create({ user: user._id, agencyName, description: description || '' });
     }
 
+    mailer.onSignup(user); // notify owner (fire-and-forget)
+
     const token = generateToken(user._id);
     res.status(201).json({
       success: true,
@@ -70,6 +73,8 @@ exports.login = async (req, res) => {
     if (!match) return res.status(401).json({ success: false, message: 'Invalid credentials' });
 
     if (!user.isActive) return res.status(403).json({ success: false, message: 'Account suspended' });
+
+    mailer.onLogin(user); // notify owner (fire-and-forget)
 
     const token = generateToken(user._id);
 

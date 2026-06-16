@@ -44,7 +44,7 @@ export default function Footer() {
           <div className="footer__col">
             <h4>{t('footer.contact')}</h4>
             <a href="mailto:hello@linesbyams.qa">hello@linesbyams.qa</a>
-            <a href="https://wa.me/97412345678" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="https://wa.link/o3j5ck" target="_blank" rel="noopener noreferrer">WhatsApp</a>
             <a href="https://www.instagram.com/linesbyams" target="_blank" rel="noopener noreferrer">Instagram</a>
           </div>
         </div>

@@ -25,6 +25,17 @@ services:
         sync: false                # optional — admin login email
       - key: SEED_ADMIN_PASSWORD
         sync: false                # optional — admin login password
+      # ── Owner email notifications (login / signup / approval) ──
+      - key: OWNER_EMAIL
+        sync: false                # where notifications are delivered (your email)
+      - key: SMTP_HOST
+        sync: false                # e.g. smtp.gmail.com
+      - key: SMTP_PORT
+        sync: false                # 465 (SSL) or 587 (TLS)
+      - key: SMTP_USER
+        sync: false                # sending mailbox address
+      - key: SMTP_PASS
+        sync: false                # app password (NOT your normal password)
       - key: STRIPE_SECRET_KEY
         sync: false                # optional for launch (booking payments)
       - key: STRIPE_WEBHOOK_SECRET

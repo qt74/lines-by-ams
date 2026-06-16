@@ -27,3 +27,5 @@ Thumbs.db
 # Netlify CLI state
 .netlify/
 clothes/
+server/srv.log
+server/srv.err.log

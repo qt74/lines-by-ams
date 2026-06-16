@@ -3,6 +3,7 @@ const Agency     = require('../models/Agency');
 const Employment = require('../models/Employment');
 const Shop       = require('../models/Shop');
 const Product    = require('../models/Product');
+const mailer     = require('../utils/mailer');
 
 // @desc  Get all users
 // @route GET /api/admin/users
@@ -47,6 +48,7 @@ exports.approveAgency = async (req, res) => {
     const { approved } = req.body;
     const agency = await Agency.findByIdAndUpdate(req.params.id, { isApproved: approved }, { new: true });
     if (!agency) return res.status(404).json({ success: false, message: 'Agency not found' });
+    mailer.onAgencyApproved(agency, approved); // notify owner (fire-and-forget)
     res.json({ success: true, agency });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
