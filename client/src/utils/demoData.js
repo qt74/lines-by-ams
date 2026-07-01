@@ -15,6 +15,8 @@ const IMG = {
   dress:   'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80',
   kids:    'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=800&q=80',
   scarf:   'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=800&q=80',
+  gownA:   'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&q=80',
+  gownB:   'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&q=80',
 };
 
 const PAY = ['cash', 'apple_pay', 'visa', 'mastercard', 'paypal'];
@@ -24,13 +26,13 @@ const shops = [
     _id: 'demo-mariam', name: 'Mariam Couture', nameAr: 'مريم كوتور',
     category: 'Fashion', location: 'Al Wakrah, Qatar',
     description: 'Hand-beaded couture evening gowns, made to order for the modern Gulf woman.',
-    coverImage: IMG.dress, logo: '', isPremium: true, whatsapp: '+97455003456',
+    coverImage: IMG.gownA, logo: '', isPremium: true, whatsapp: '+97455003456',
     instagram: '@mariam_couture', paymentMethods: PAY,
     products: [
-      { _id: 'p-couture-1', name: 'Pearl Constellation Gown', price: 4500, comparePrice: 5800, category: 'Fashion', images: [IMG.dress], inStock: true, description: 'Off-shoulder mermaid gown with hand-applied pearl and crystal fan beadwork over sheer sleeves. Made to order.' },
+      { _id: 'p-couture-1', name: 'Pearl Constellation Gown', price: 4500, comparePrice: 5800, category: 'Fashion', images: [IMG.gownA], inStock: true, description: 'Off-shoulder mermaid gown with hand-applied pearl and crystal fan beadwork over sheer sleeves. Made to order.' },
       { _id: 'p-couture-2', name: 'Golden Fan Couture Gown', price: 5200, category: 'Fashion', images: [IMG.dress], inStock: true, description: 'Gilded fan-pattern beaded bodice flowing into a finely pleated champagne skirt.' },
-      { _id: 'p-couture-3', name: 'Champagne Cascade Gown', price: 4800, category: 'Fashion', images: [IMG.dress], inStock: true, description: 'Sweetheart beaded bodice with a high front slit and cascading pleated train.' },
-      { _id: 'p-couture-4', name: 'Ruby Starlight Gown', price: 6500, category: 'Fashion', images: [IMG.dress], inStock: true, description: 'Golden lattice beadwork set with ruby-toned gemstones and a dramatic pleated slit skirt.' },
+      { _id: 'p-couture-3', name: 'Champagne Cascade Gown', price: 4800, category: 'Fashion', images: [IMG.gownB], inStock: true, description: 'Sweetheart beaded bodice with a high front slit and cascading pleated train.' },
+      { _id: 'p-couture-4', name: 'Ruby Starlight Gown', price: 6500, category: 'Fashion', images: [IMG.gownA], inStock: true, description: 'Golden lattice beadwork set with ruby-toned gemstones and a dramatic pleated slit skirt.' },
     ],
   },
   {

@@ -69,7 +69,7 @@ export default function Home() {
           <div className="stats-bar__divider" />
           <div className="stats-bar__item">
             <span className="stats-bar__num">{t('home.statsFree')}</span>
-            <span className="stats-bar__label">{t('home.statesFreeSub')}</span>
+            <span className="stats-bar__label">{t('home.statsFreeSub')}</span>
           </div>
         </div>
       </section>
